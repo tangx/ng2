@@ -18,6 +18,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os/exec"
+	"runtime"
 
 	"github.com/sirupsen/logrus"
 
@@ -49,7 +50,16 @@ func init() {
 }
 
 func listen() {
-	cmd := exec.Command("lsof", "-nP", "-iTCP", "-sTCP:LISTEN")
+
+	var cmd *exec.Cmd
+
+	// 获取操作系统
+	switch runtime.GOOS {
+	case "darwin":
+		cmd = exec.Command("lsof", "-nP", "-iTCP", "-sTCP:LISTEN")
+	case "linux":
+		cmd = exec.Command("netstat", "-tunpl")
+	}
 
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
@@ -66,4 +76,5 @@ func listen() {
 		logrus.Fatalf("%v", err)
 	}
 	fmt.Printf("%s", string(str))
+
 }
