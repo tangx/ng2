@@ -32,7 +32,7 @@ var (
 // 如果使用循环， 看 ./uuidgen.go.tmp
 // 通道一定要使用 make 进行初始化。
 // 最开始声明 ch  `var ch chan uuid.UUID` ; 但是没有初始化,  在 printer 中始终拿不到信息，实际上应该是， uuidgen 就没有传入。
-var ch = make(chan uuid.UUID)
+var ch = make(chan uuid.UUID, 3)
 
 // uuidCmd represents the uuid command
 var uuidCmd = &cobra.Command{
