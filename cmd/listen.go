@@ -59,6 +59,8 @@ func listen() {
 		cmd = exec.Command("lsof", "-nP", "-iTCP", "-sTCP:LISTEN")
 	case "linux":
 		cmd = exec.Command("netstat", "-tunpl")
+	default:
+		return
 	}
 
 	stdout, err := cmd.StdoutPipe()
