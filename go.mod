@@ -3,6 +3,8 @@ module github.com/tangx/ng2
 go 1.12
 
 require (
+	github.com/EDDYCJY/fake-useragent v0.2.0
+	github.com/PuerkitoBio/goquery v1.5.0 // indirect
 	github.com/google/uuid v1.1.1
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/sirupsen/logrus v1.4.1
