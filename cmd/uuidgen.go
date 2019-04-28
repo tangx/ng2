@@ -16,50 +16,71 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/google/uuid"
 	"github.com/spf13/cobra"
-	"strings"
 )
 
 // Flags
 var (
-	Upper bool
+	Upper  bool
 	Number int
 )
 
-
+// 这里可以不用通道 ch 的，使用的目的，只是为了练习
+// 如果使用循环， 看 ./uuidgen.go.tmp
+// 通道一定要使用 make 进行初始化。
+// 最开始声明 ch  `var ch chan uuid.UUID` ; 但是没有初始化,  在 printer 中始终拿不到信息，实际上应该是， uuidgen 就没有传入。
+var ch = make(chan uuid.UUID)
 
 // uuidCmd represents the uuid command
 var uuidCmd = &cobra.Command{
 	Use:   "uuidgen",
 	Short: "generate uuid",
-	Long: `generate uuid for you`,
+	Long:  `generate uuid for you`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-
-		uuidgen(Number)
+		uuidMain()
 
 	},
 }
 
-
 func init() {
 	rootCmd.AddCommand(uuidCmd)
 
-
-	uuidCmd.Flags().BoolVarP(&Upper,"upper","u",false,"Generate UPPER CASE uuid, (default lower)")
-	uuidCmd.Flags().IntVarP(&Number,"num","n",1,"number of UUID to be generated")
+	uuidCmd.Flags().BoolVarP(&Upper, "upper", "u", false, "Generate UPPER CASE uuid, (default lower)")
+	uuidCmd.Flags().IntVarP(&Number, "num", "n", 1, "number of UUID to be generated")
 }
 
-func uuidgen(num int){
+func uuidgen(num int) {
 
-	for i:=0 ; i<=num; i++ {
-		id:=uuid.New()
-		s:=id.String()
-		if Upper {
-			s=strings.ToUpper(s)
+	// https://github.com/Unknwon/the-way-to-go_ZH_CN/blob/master/eBook/16.4.md
+	// - 切片、映射和通道，使用make
+	// - 数组、结构体和所有的值类型，使用new
+	// var ch1 chan string
+	for i := 0; i < num; i++ {
+		id := uuid.New()
+		ch <- id
+	}
+	close(ch)
+
+}
+
+func printer(upper bool) {
+
+	for id := range ch {
+		s := id.String()
+		if upper {
+			s = strings.ToUpper(s)
 		}
+
 		fmt.Println(s)
 	}
+	//wg.Done()
+}
 
+func uuidMain() {
+	go uuidgen(Number)
+	printer(Upper)
 }

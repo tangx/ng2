@@ -28,22 +28,16 @@ var (
 )
 
 
-var ch chan uuid.UUID
-//var wg sync.WaitGroup
 
 // uuidCmd represents the uuid command
 var uuidCmd = &cobra.Command{
-	Use:   "uuidgen",
+	Use:   "uuidgen2",
 	Short: "generate uuid",
 	Long: `generate uuid for you`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		go printer(Upper)
-		//wg.Add(1)
-		uuidgen(Number)
 
-		//close(ch)
-		//wg.Wait()
+		uuidgen(Number)
 
 	},
 }
@@ -59,32 +53,13 @@ func init() {
 
 func uuidgen(num int){
 
-	for i:=0 ; i<=num; i++ {
+	for i:=1 ; i<=num; i++ {
 		id:=uuid.New()
-		fmt.Println(id)
-		ch <- id
-	}
-	close(ch)
-
-}
-
-func printer(upper bool){
-
-	fmt.Println("enter printer")
-	for id := range ch {
-		fmt.Println("get id")
 		s:=id.String()
-		if upper {
-			s=strings.ToLower(s)
+		if Upper {
+			s=strings.ToUpper(s)
 		}
-
 		fmt.Println(s)
 	}
-	//wg.Done()
-}
 
-func uuidMain (){
-	go uuidgen(10)
-	printer(true)
 }
-
