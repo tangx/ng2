@@ -16,9 +16,7 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net"
-	"net/http"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -52,17 +50,19 @@ func ipMain() {
 
 func getPublicIP() {
 
-	resp, err := http.Get("http://ip.cip.cc")
-	if err != nil {
-		logrus.Errorf("%v", err)
-	}
-	defer resp.Body.Close()
+	//resp, err := http.Get("http://ip.cip.cc")
+	//if err != nil {
+	//	logrus.Errorf("%v", err)
+	//}
+	//defer resp.Body.Close()
+	//
+	//body, err := ioutil.ReadAll(resp.Body)
+	//if err != nil {
+	//	logrus.Errorf("%v", err)
+	//}
+	//fmt.Printf("Public IP:\n    %s", body)
 
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		logrus.Errorf("%v", err)
-	}
-	fmt.Printf("Public IP:\n    %s", body)
+	getPublicIP2()
 
 }
 
@@ -78,4 +78,9 @@ func getLocalIP() {
 		fmt.Printf("    %s\n", addr.String())
 	}
 
+}
+
+func getPublicIP2() {
+	bodyByte := httpGet("http://ip.cip.cc")
+	fmt.Printf("Public IP:\n    %s", bodyByte)
 }
