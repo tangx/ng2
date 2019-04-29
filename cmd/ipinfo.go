@@ -16,28 +16,41 @@ package cmd
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"net"
 
 	"github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
 )
 
-// ipinfoCmd represents the ipinfo command
-var ipinfoCmd = &cobra.Command{
-	Use:   "ipinfo",
-	Short: "查询 ip 地址详细信息",
-	Long:  `使用 ip.taobao.com api 接口，查询 ip 地址详细信息`,
-	Run: func(cmd *cobra.Command, args []string) {
-		ipinfo(IPAddr)
+var (
+	// ipinfoCmd represents the ipinfo command
+	ipinfoCmd = &cobra.Command{
+		Use:   "ipinfo",
+		Short: "查询 ip 地址详细信息",
+		Long:  `使用 ip.taobao.com api 接口，查询 ip 地址详细信息`,
+		Run: func(cmd *cobra.Command, args []string) {
+			//ipinfo(IPAddr)
+			//ipinfo(args[0])
+			ipsInfo(args)
 
-	},
-}
+		},
+		Args: func(cmd *cobra.Command, args []string) error {
+			if len(args) < 1 {
+				return errors.New("requires a color argument")
+			}
+			return nil
+			//return fmt.Errorf("invalid color specified: %s", args[0])
+		},
+	}
+)
 
 func init() {
 	rootCmd.AddCommand(ipinfoCmd)
 
-	ipinfoCmd.Flags().StringVarP(&IPAddr, "ip", "", "", "specify ipaddr")
+	//ipinfoCmd.Flags().StringVarP(&IPAddr, "ip", "", "", "specify ipaddr")
 	ipinfoCmd.Flags().BoolVarP(&Oneline, "no-trunc", "", false, "单行输出")
 	ipinfoCmd.Flags().StringVarP(&IPAPI, "api", "", ApiURL, ApiURLDesc)
 }
@@ -71,12 +84,12 @@ func ipinfo(ip string) {
 	// oneline
 	if Oneline {
 		data, _ := json.Marshal(js)
-		fmt.Printf("%s", data)
+		fmt.Printf("%s\n", data)
 		return
 	}
 
 	data, _ := json.MarshalIndent(js, "", "  ")
-	fmt.Printf("%s", data)
+	fmt.Printf("%s\n", data)
 	// pretty indent
 }
 
@@ -84,7 +97,37 @@ func unmarshal(data []byte) interface{} {
 	var js interface{}
 	err := json.Unmarshal(data, &js)
 	if err != nil {
-		logrus.Fatalf("%s", err)
+		logrus.Fatal("%s", err)
 	}
 	return js
+}
+
+//// 使用 re 正则表达式判断包是否合法
+//func ipValid(ipAddress string) bool {
+//	ipAddress = strings.Trim(ipAddress, " ")
+//
+//	re, _ := regexp.Compile(`^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$`)
+//	if re.MatchString(ipAddress) {
+//		return true
+//	}
+//	return false
+//}
+
+// 使用 net package 判断 ip 地址是否合法
+func ipValid(ipaddr string) bool {
+	if net.ParseIP(ipaddr) != nil {
+		return true
+	}
+	return false
+}
+
+func ipsInfo(ips []string) {
+	for _, ip := range ips {
+		// ip valid check
+		if ipValid(ip) {
+			ipinfo(ip)
+		} else {
+			logrus.Error("Invalid ip address: ", ip)
+		}
+	}
 }
