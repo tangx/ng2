@@ -18,6 +18,12 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/tangx/ng2/cmd/ip"
+	"github.com/tangx/ng2/cmd/ipinfo"
+	"github.com/tangx/ng2/cmd/listen"
+	"github.com/tangx/ng2/cmd/uuidgen"
+	"github.com/tangx/ng2/cmd/weather"
+
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -46,8 +52,15 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
+	rootCmd.AddCommand(weather.WeatherCmd)
+	rootCmd.AddCommand(ip.IpCmd)
+	rootCmd.AddCommand(ipinfo.IpinfoCmd)
+	rootCmd.AddCommand(listen.ListenCmd)
+	rootCmd.AddCommand(uuidgen.UuidCmd)
+}
 
+func init() {
+	cobra.OnInitialize(initConfig)
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.

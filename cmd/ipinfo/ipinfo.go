@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmd
+package ipinfo
 
 import (
 	"encoding/json"
@@ -20,14 +20,16 @@ import (
 	"fmt"
 	"net"
 
+	"github.com/tangx/ng2/utils"
+
 	"github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
 )
 
 var (
-	// ipinfoCmd represents the ipinfo command
-	ipinfoCmd = &cobra.Command{
+	// IpinfoCmd represents the ipinfo command
+	IpinfoCmd = &cobra.Command{
 		Use:   "ipinfo",
 		Short: "查询 ip 地址详细信息",
 		Long:  `使用 ip.taobao.com api 接口，查询 ip 地址详细信息`,
@@ -48,23 +50,27 @@ var (
 )
 
 func init() {
-	rootCmd.AddCommand(ipinfoCmd)
+	ApiURLDesc := ""
+	for k, v := range ApiURL {
+		ApiURLDesc += fmt.Sprintf("%v: %v\n", k, v)
+	}
 
-	//ipinfoCmd.Flags().StringVarP(&IPAddr, "ip", "", "", "specify ipaddr")
-	ipinfoCmd.Flags().BoolVarP(&Oneline, "no-trunc", "", false, "单行输出")
-	ipinfoCmd.Flags().StringVarP(&IPAPI, "api", "", ApiURL, ApiURLDesc)
+	//IpinfoCmd.Flags().StringVarP(&IPAddr, "ip", "", "", "specify ipaddr")
+	IpinfoCmd.Flags().BoolVarP(&Oneline, "no-trunc", "", false, "单行输出")
+	IpinfoCmd.Flags().StringVarP(&IPAPI, "api", "", "default", ApiURLDesc)
 }
 
-const (
-	//ApiURL = "http://ip.taobao.com/service/getIpInfo.php?ip=%s"
-	//ApiURL = "http://ip-api.com/json/%s"
-	ApiURL = "https://api.ttt.sh/ip/qqwry/%s"
-
-	ApiURLDesc = `指定查询 ApiURL
-海外: http://ip-api.com/json/%s
-淘宝: http://ip.taobao.com/service/getIpInfo.php?ip=%s 
-`
-)
+//
+//const (
+//	//ApiURL = "http://ip.taobao.com/service/getIpInfo.php?ip=%s"
+//	//ApiURL = "http://ip-api.com/json/%s"
+//	//ApiURL = "https://api.ttt.sh/ip/qqwry/%s"
+//
+//	ApiURLDesc = `指定查询 ApiURL
+//ipapi: http://ip-api.com/json/%s
+//taobao: http://ip.taobao.com/service/getIpInfo.php?ip=%s
+//`
+//)
 
 var (
 	IPAddr  string
@@ -72,11 +78,18 @@ var (
 	IPAPI   string
 )
 
+var ApiURL = map[string]string{
+	"taobao":  "http://ip.taobao.com/service/getIpInfo.php?ip=%s",
+	"ipapi":   "http://ip-api.com/json/%s",
+	"default": "https://api.ttt.sh/ip/qqwry/%s",
+}
+
 func ipinfo(ip string) {
-	url := fmt.Sprintf(ApiURL, ip)
+
+	url := fmt.Sprintf(ApiURL[IPAPI], ip)
 	logrus.Info(url)
 
-	bodyByte := httpGet(url)
+	bodyByte := utils.HttpGet(url)
 
 	//logrus.Infof("%s", bodyByte)
 	js := unmarshal(bodyByte)

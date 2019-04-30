@@ -1,4 +1,4 @@
-package cmd
+package utils
 
 import (
 	"io/ioutil"
@@ -26,7 +26,7 @@ func httpGet2(url string) []byte {
 	return bodyByte
 }
 
-func httpGet(url string) []byte {
+func HttpGet(url string) []byte {
 	client := &http.Client{Timeout: 2 * time.Second}
 
 	req, err := http.NewRequest("GET", url, nil)

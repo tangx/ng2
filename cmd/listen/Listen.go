@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmd
+package listen
 
 import (
 	"fmt"
@@ -26,27 +26,13 @@ import (
 )
 
 // listenCmd represents the listen command
-var listenCmd = &cobra.Command{
+var ListenCmd = &cobra.Command{
 	Use:   "listen",
 	Short: "查看本机监听",
 	Long:  `查看本机端口监听`,
 	Run: func(cmd *cobra.Command, args []string) {
 		listen()
 	},
-}
-
-func init() {
-	rootCmd.AddCommand(listenCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// listenCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// listenCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 func listen() {

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package cmd
+package ip
 
 import (
 	"fmt"
@@ -20,10 +20,11 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/tangx/ng2/utils"
 )
 
 // ipCmd represents the ip command
-var ipCmd = &cobra.Command{
+var IpCmd = &cobra.Command{
 	Use:   "ip",
 	Short: "查询本机 IP 地址",
 	Long:  `查询IP地址`,
@@ -36,12 +37,6 @@ var ipCmd = &cobra.Command{
 var (
 	ipPublic bool
 )
-
-func init() {
-	rootCmd.AddCommand(ipCmd)
-
-	//ipCmd.Flags().BoolVarP(&ipPublic, "public", "p", false, "查询公网 IP")
-}
 
 func ipMain() {
 	getLocalIP()
@@ -81,6 +76,6 @@ func getLocalIP() {
 }
 
 func getPublicIP2() {
-	bodyByte := httpGet("http://ip.cip.cc")
+	bodyByte := utils.HttpGet("http://ip.cip.cc")
 	fmt.Printf("Public IP:\n    %s", bodyByte)
 }

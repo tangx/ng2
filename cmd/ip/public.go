@@ -1,7 +1,7 @@
 //
 // 使用 cobra add command -p parentCmd 添加子命令(deault: parentCmd = rootCmd)
 //
-package cmd
+package ip
 
 import (
 	"github.com/spf13/cobra"
@@ -20,7 +20,7 @@ var publicCmd = &cobra.Command{
 func init() {
 	//
 	// 此处: 将命令注册到上级父命令
-	ipCmd.AddCommand(publicCmd)
+	IpCmd.AddCommand(publicCmd)
 }
 
 //
