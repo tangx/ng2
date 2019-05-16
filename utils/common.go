@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -48,4 +49,20 @@ func HttpGet(url string) []byte {
 	}
 
 	return bodyByte
+}
+
+func PrettyJson(data []byte, pretty bool) []byte {
+
+	var js interface{}
+
+	json.Unmarshal(data, &js)
+
+	var b []byte
+	if pretty {
+		b, _ = json.MarshalIndent(js, "", "  ")
+	} else {
+		b, _ = json.Marshal(js)
+	}
+
+	return b
 }
