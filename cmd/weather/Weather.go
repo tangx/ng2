@@ -17,12 +17,14 @@ package weather
 import (
 	"fmt"
 
+	"github.com/tangx/ng2/utils"
+
 	"github.com/spf13/cobra"
 )
 
 // WeatherCmd represents the Weather command
 var WeatherCmd = &cobra.Command{
-	Use:   "Weather",
+	Use:   "weather",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
@@ -30,7 +32,29 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Weather called")
+		weather(args[0])
 	},
+}
+
+var pretty bool
+var NoTrunc bool
+
+func init() {
+	//WeatherCmd.Flags().BoolVarP(&pretty, "pretty", "p", true, "单行输出")
+	WeatherCmd.Flags().BoolVarP(&NoTrunc, "no-trunc", "", false, "单行输出")
+
+}
+func weather(city string) {
+
+	//data := utils.HttpGet("http://www.mxnzp.com/api/weather/current/" + city)
+
+	//data := utils.HttpGet("http://www.mxnzp.com/api/weather/current/%E6%B7%B1%E5%9C%B3")
+	data := utils.HttpGet("http://www.mxnzp.com/api/weather/current/" + city)
+
+	data = utils.PrettyJson(data, !NoTrunc)
+
+	fmt.Printf("%s", data)
+
 }
