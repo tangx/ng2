@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ip
+package cip
 
 import (
 	"fmt"
@@ -25,7 +25,7 @@ import (
 
 // ipCmd represents the ip command
 var IpCmd = &cobra.Command{
-	Use:   "ip",
+	Use:   "cip",
 	Short: "查询本机 IP 地址",
 	Long:  `查询IP地址`,
 	Run: func(cmd *cobra.Command, args []string) {

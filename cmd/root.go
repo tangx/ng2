@@ -18,7 +18,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/tangx/ng2/cmd/ip"
+	"github.com/tangx/ng2/cmd/wifipasswd"
+
+	"github.com/tangx/ng2/cmd/cip"
+
 	"github.com/tangx/ng2/cmd/ipinfo"
 	"github.com/tangx/ng2/cmd/listen"
 	"github.com/tangx/ng2/cmd/uuidgen"
@@ -53,10 +56,12 @@ func Execute() {
 
 func init() {
 	rootCmd.AddCommand(weather.WeatherCmd)
-	rootCmd.AddCommand(ip.IpCmd)
+	rootCmd.AddCommand(cip.IpCmd)
+
 	rootCmd.AddCommand(ipinfo.IpinfoCmd)
 	rootCmd.AddCommand(listen.ListenCmd)
 	rootCmd.AddCommand(uuidgen.UuidCmd)
+	rootCmd.AddCommand(wifipasswd.WspCmd)
 }
 
 func init() {

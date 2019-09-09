@@ -30,7 +30,7 @@ import (
 var (
 	// IpinfoCmd represents the ipinfo command
 	IpinfoCmd = &cobra.Command{
-		Use:   "ipinfo",
+		Use:   "ip",
 		Short: "查询 ip 地址详细信息",
 		Long:  `使用 ip.taobao.com api 接口，查询 ip 地址详细信息`,
 		Run: func(cmd *cobra.Command, args []string) {

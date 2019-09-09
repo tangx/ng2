@@ -1,7 +1,7 @@
 //
 // 使用 cobra add command -p parentCmd 添加子命令(deault: parentCmd = rootCmd)
 //
-package ip
+package cip
 
 import (
 	"github.com/spf13/cobra"
