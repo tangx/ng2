@@ -1,18 +1,6 @@
-// Copyright © 2019 NAME HERE <EMAIL ADDRESS>
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package ipinfo
+
+// 查询 IP 地址信息
 
 import (
 	"encoding/json"
@@ -50,6 +38,7 @@ var (
 )
 
 func init() {
+	// ApiURLDesc 帮助描述
 	ApiURLDesc := ""
 	for k, v := range ApiURL {
 		ApiURLDesc += fmt.Sprintf("%v: %v\n", k, v)
@@ -60,28 +49,21 @@ func init() {
 	IpinfoCmd.Flags().StringVarP(&IPAPI, "api", "", "default", ApiURLDesc)
 }
 
-//
-//const (
-//	//ApiURL = "http://ip.taobao.com/service/getIpInfo.php?ip=%s"
-//	//ApiURL = "http://ip-api.com/json/%s"
-//	//ApiURL = "https://api.ttt.sh/ip/qqwry/%s"
-//
-//	ApiURLDesc = `指定查询 ApiURL
-//ipapi: http://ip-api.com/json/%s
-//taobao: http://ip.taobao.com/service/getIpInfo.php?ip=%s
-//`
-//)
-
 var (
-	IPAddr  string
+	// IPAddr IP 地址
+	IPAddr string
+	// Oneline 单行输出
 	Oneline bool
-	IPAPI   string
+	// IPAPI api 接口地址
+	IPAPI string
 )
 
+// ApiURL api 接口地址
 var ApiURL = map[string]string{
 	"taobao":  "http://ip.taobao.com/service/getIpInfo.php?ip=%s",
 	"ipapi":   "http://ip-api.com/json/%s",
-	"default": "https://api.ttt.sh/ip/qqwry/%s",
+	"default": "https://www.mxnzp.com/api/ip/aim_ip?ip=%s",
+	"ipsb":    "https://api.ip.sb/geoip/%s",
 }
 
 func ipinfo(ip string) {
@@ -114,17 +96,6 @@ func unmarshal(data []byte) interface{} {
 	}
 	return js
 }
-
-//// 使用 re 正则表达式判断包是否合法
-//func ipValid(ipAddress string) bool {
-//	ipAddress = strings.Trim(ipAddress, " ")
-//
-//	re, _ := regexp.Compile(`^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$`)
-//	if re.MatchString(ipAddress) {
-//		return true
-//	}
-//	return false
-//}
 
 // 使用 net package 判断 ip 地址是否合法
 func ipValid(ipaddr string) bool {
