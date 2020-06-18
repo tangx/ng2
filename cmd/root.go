@@ -61,7 +61,7 @@ func init() {
 	rootCmd.AddCommand(ipinfo.IpinfoCmd)
 	rootCmd.AddCommand(listen.ListenCmd)
 	rootCmd.AddCommand(uuidgen.UuidCmd)
-	rootCmd.AddCommand(wifipasswd.WspCmd)
+	rootCmd.AddCommand(wifipasswd.WpCmd)
 }
 
 func init() {
